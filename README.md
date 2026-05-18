@@ -17,9 +17,9 @@ Este repositório é responsável exclusivamente pela camada back-end da aplica�
 
 Tecnologias utilizadas no projeto:
 
-Node.js
-NestJS
-TypeScript
-PostgreSQL
+Node.js,
+NestJS,
+TypeScript,
+PostgreSQL.
 
 O front-end da aplicação será desenvolvido em um repositório separado.
