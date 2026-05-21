@@ -20,6 +20,7 @@ Tecnologias utilizadas no projeto:
 Node.js,
 NestJS,
 TypeScript,
-PostgreSQL.
+PostgreSQL,
+Prisma.
 
 O front-end da aplicação será desenvolvido em um repositório separado.
