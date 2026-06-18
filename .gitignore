@@ -62,3 +62,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 prisma/schema.prisma
 src/database/database.module.ts
 generated/prisma/client
+prisma/schema.prisma
+src/database/database.module.ts
+.gitgnore
