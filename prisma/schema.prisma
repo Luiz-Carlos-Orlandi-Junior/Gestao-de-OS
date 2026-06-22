@@ -7,10 +7,30 @@ datasource db {
 }
 
 model User { 
-  id    Int     @id @default(autoincrement()) 
+  id_user    Int     @id @default(autoincrement()) 
   email String  @unique
   name  String
   password String
   createdAT DateTime @default(now())
   updateAt DateTime @updatedAt
 } 
+
+model Customer {
+  id_customer Int @id @default(autoincrement())
+  name String
+  addresses   Address[]
+}
+
+model Address {
+  id_address    Int      @id @default(autoincrement())
+  street        String
+  number_house  String
+  complement    String?
+  neighborhood  String
+  city          String
+  state         String
+  zip_code      String
+
+  customer      Customer @relation(fields: [customer_id], references: [id_customer])
+  customer_id   Int
+}
