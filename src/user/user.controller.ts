@@ -15,7 +15,7 @@ export class UserController {
 
   @Get(':id')
   async getUser(@Param('id') id: string): Promise<UserModel | null> {
-    return this.userService.user({ id: Number(id) });
+    return this.userService.user({ id_user: Number(id) });
   }
 
   @Get()
@@ -29,7 +29,7 @@ async getUsers(): Promise<UserModel[]> {
     @Body() userData: Prisma.UserUpdateInput,
   ): Promise<UserModel> {
     return this.userService.updateUser({
-      where: { id: Number(id) },
+      where: { id_user: Number(id) },
       data: userData,
     });
   }
@@ -37,7 +37,7 @@ async getUsers(): Promise<UserModel[]> {
 
   @Delete(':id')
   async deleteUser(@Param('id') id: string): Promise<UserModel> {
-    return this.userService.deleteUser({ id: Number(id) });
+    return this.userService.deleteUser({ id_user: Number(id) });
   }
 }
 
