@@ -6,6 +6,7 @@ import {
   Patch,
   Delete,
   Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Customer as CustomerModel } from '@prisma/client';
 import { CustomerService } from './customer.service';
@@ -24,8 +25,8 @@ export class CustomerController {
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: string): Promise<CustomerModel | null> {
-    return this.customerService.customer({ id_customer: Number(id) });
+  async getUser(@Param('id', ParseIntPipe) id: number): Promise<CustomerModel | null> {
+    return this.customerService.customer({ id_customer: id });
   }
 
   @Get()
@@ -35,14 +36,14 @@ export class CustomerController {
 
   @Patch(':id')
   async updateCustomer(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateCustomerDto: UpdateCustomerDto,
   ): Promise<CustomerModel> {
-    return this.customerService.updateCustomer(Number(id), updateCustomerDto);
+    return this.customerService.updateCustomer(id, updateCustomerDto);
   }
 
   @Delete(':id')
-  async deleteCustomer(@Param('id') id: string): Promise<CustomerModel> {
-    return this.customerService.deleteCustomer({ id_customer: Number(id) });
+  async deleteCustomer(@Param('id', ParseIntPipe) id: number): Promise<CustomerModel> {
+    return this.customerService.deleteCustomer({ id_customer: id });
   }
 }

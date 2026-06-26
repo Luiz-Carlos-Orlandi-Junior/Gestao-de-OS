@@ -1,4 +1,4 @@
-import { Controller, Body, Post, Get, Patch, Delete, Param } from '@nestjs/common';
+import { Controller, Body, Post, Get, Patch, Delete, Param, ParseIntPipe } from '@nestjs/common';
 import { User as UserModel, Prisma } from '@prisma/client'; // ← adicione o Prisma aqui
 import { UserService } from './user.service';
 
@@ -14,8 +14,8 @@ export class UserController {
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: string): Promise<UserModel | null> {
-    return this.userService.user({ id_user: Number(id) });
+  async getUser(@Param('id', ParseIntPipe) id: number): Promise<UserModel | null> {
+    return this.userService.user({ id_user: id });
   }
 
   @Get()
@@ -25,19 +25,19 @@ async getUsers(): Promise<UserModel[]> {
 
   @Patch(':id')
   async updateUser(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() userData: Prisma.UserUpdateInput,
   ): Promise<UserModel> {
     return this.userService.updateUser({
-      where: { id_user: Number(id) },
+      where: { id_user: id },
       data: userData,
     });
   }
 
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: string): Promise<UserModel> {
-    return this.userService.deleteUser({ id_user: Number(id) });
+  async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<UserModel> {
+    return this.userService.deleteUser({ id_user: id });
   }
 }
 
