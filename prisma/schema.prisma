@@ -19,6 +19,7 @@ model Customer {
   id_customer Int @id @default(autoincrement())
   name String
   addresses   Address[]
+  vehicle  Vehicle[]
 }
 
 model Address {
@@ -30,6 +31,19 @@ model Address {
   city          String
   state         String
   zip_code      String
+
+  customer      Customer @relation(fields: [customer_id], references: [id_customer])
+  customer_id   Int
+}
+
+model Vehicle {
+  id_vehicle    Int      @id @default(autoincrement())
+  brand         String
+  model         String
+  year          Int
+  plate         String   @unique
+  color         String?
+  fipe_code     String?
 
   customer      Customer @relation(fields: [customer_id], references: [id_customer])
   customer_id   Int
