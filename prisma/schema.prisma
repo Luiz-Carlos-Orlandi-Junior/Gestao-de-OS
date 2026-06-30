@@ -43,7 +43,7 @@ model Vehicle {
   year          Int
   plate         String   @unique
   color         String?
-  fipe_code     String?
+  fipe_code     String
 
   customer      Customer @relation(fields: [customer_id], references: [id_customer])
   customer_id   Int
