@@ -26,5 +26,39 @@ export class VehicleService {
       where: VehicleWhereUniqueInput
     })
   }
+
+async vehicles(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.VehicleWhereUniqueInput;
+    where?: Prisma.VehicleWhereInput;
+    orderBy?: Prisma.VehicleOrderByWithRelationInput;
+  }): Promise<Vehicle[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.vehicle.findMany({ skip, take, cursor, where, orderBy });
+  }
+
+  async updateVehicle(
+    id: number,
+    data: Prisma.VehicleUpdateInput
+  ): Promise<Vehicle> {
+    try{
+      return await this.prisma.vehicle.update({
+            where: {id_vehicle: id},
+            data
+      })
+    } catch (error){
+       throw new NotFoundException('Veiculo não encontrado');
+    }
+  }
+
+  async deleteVechicle(where: Prisma.VehicleWhereUniqueInput): Promise<Vehicle>{
+    try {
+      return this.prisma.vehicle.delete({where})
+    } catch (error) {
+      throw new NotFoundException('Veiculo não encontrado')
+    }
+  }
+
 }
 

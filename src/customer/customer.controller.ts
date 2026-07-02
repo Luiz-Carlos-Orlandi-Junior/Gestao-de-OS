@@ -25,7 +25,7 @@ export class CustomerController {
   }
 
   @Get(':id')
-  async getUser(@Param('id', ParseIntPipe) id: number): Promise<CustomerModel | null> {
+  async getCustomer(@Param('id', ParseIntPipe) id: number): Promise<CustomerModel | null> {
     return this.customerService.customer({ id_customer: id });
   }
 
