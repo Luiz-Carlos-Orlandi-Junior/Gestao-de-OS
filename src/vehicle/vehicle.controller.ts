@@ -12,7 +12,10 @@ import { Vehicle as VehicleModel } from '@prisma/client';
 import { VehicleService } from './vehicle.service';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
+import { UseGuards } from '@nestjs/common';
+import { JwtGuard } from '../auth/guards/jwt.guard';
 
+@UseGuards(JwtGuard)
 @Controller('vehicle')
 export class VehicleController {
 

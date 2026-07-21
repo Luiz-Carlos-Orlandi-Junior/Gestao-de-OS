@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { CustomerService } from '../customer/customer.service';
-import { Address } from '@prisma/client';
+import { Address, Prisma } from '@prisma/client';
 import { CreateAddressDto } from './dto/create-address.dto';
 
 @Injectable()
@@ -35,5 +35,44 @@ export class AddressService {
     });
   }
 
+   async address(
+      addressWhereUniqueInput: Prisma.AddressWhereUniqueInput,
+    ): Promise<Address | null> {
+      return this.prisma.address.findUnique({
+        where: addressWhereUniqueInput,
+      });
+    }
   
+    async customers(params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.AddressWhereUniqueInput;
+      where?: Prisma.AddressWhereInput;
+      orderBy?: Prisma.AddressOrderByWithRelationInput;
+    }): Promise<Address[]> {
+      const { skip, take, cursor, where, orderBy } = params;
+      return this.prisma.address.findMany({ skip, take, cursor, where, orderBy });
+    }
+  
+    async updateAddress(
+      id: number,
+      data: Prisma.AddressUpdateInput,
+    ): Promise<Address> {
+      try {
+        return await this.prisma.address.update({
+          where: { id_address: id },
+          data,
+        });
+      } catch (error) {
+        throw new NotFoundException('endereço não encontrado');
+      }
+    }
+  
+    async deleteAddress(where: Prisma.AddressWhereUniqueInput): Promise<Address> {
+      try {
+        return await this.prisma.address.delete({ where });
+      } catch (error) {
+        throw new NotFoundException('Endereço não encontrado');
+      }
+    }
 }
