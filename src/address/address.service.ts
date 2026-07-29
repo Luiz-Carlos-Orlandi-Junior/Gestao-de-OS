@@ -3,6 +3,7 @@ import { PrismaService } from '../database/prisma.service';
 import { CustomerService } from '../customer/customer.service';
 import { Address, Prisma } from '@prisma/client';
 import { CreateAddressDto } from './dto/create-address.dto';
+import { UpdateAddressDto } from './dto/update-address.dto';
 
 @Injectable()
 export class AddressService {
@@ -35,44 +36,41 @@ export class AddressService {
     });
   }
 
-   async address(
-      addressWhereUniqueInput: Prisma.AddressWhereUniqueInput,
-    ): Promise<Address | null> {
-      return this.prisma.address.findUnique({
-        where: addressWhereUniqueInput,
+  async address(
+    addressWhereUniqueInput: Prisma.AddressWhereUniqueInput,
+  ): Promise<Address | null> {
+    return this.prisma.address.findUnique({
+      where: addressWhereUniqueInput,
+    });
+  }
+
+  async addresses(customerId: number): Promise<Address[]> {
+    return this.prisma.address.findMany({
+      where: { customer_id: customerId },
+    });
+  }
+
+  async updateAddress(
+    id: number,
+    data: UpdateAddressDto,
+  ): Promise<Address> {
+    try {
+      return await this.prisma.address.update({
+        where: { id_address: id },
+        data,
       });
+    } catch (error) {
+      throw new NotFoundException('Endereço não encontrado');
     }
-  
-    async customers(params: {
-      skip?: number;
-      take?: number;
-      cursor?: Prisma.AddressWhereUniqueInput;
-      where?: Prisma.AddressWhereInput;
-      orderBy?: Prisma.AddressOrderByWithRelationInput;
-    }): Promise<Address[]> {
-      const { skip, take, cursor, where, orderBy } = params;
-      return this.prisma.address.findMany({ skip, take, cursor, where, orderBy });
+  }
+
+  async deleteAddress(
+    where: Prisma.AddressWhereUniqueInput,
+  ): Promise<Address> {
+    try {
+      return await this.prisma.address.delete({ where });
+    } catch (error) {
+      throw new NotFoundException('Endereço não encontrado');
     }
-  
-    async updateAddress(
-      id: number,
-      data: Prisma.AddressUpdateInput,
-    ): Promise<Address> {
-      try {
-        return await this.prisma.address.update({
-          where: { id_address: id },
-          data,
-        });
-      } catch (error) {
-        throw new NotFoundException('endereço não encontrado');
-      }
-    }
-  
-    async deleteAddress(where: Prisma.AddressWhereUniqueInput): Promise<Address> {
-      try {
-        return await this.prisma.address.delete({ where });
-      } catch (error) {
-        throw new NotFoundException('Endereço não encontrado');
-      }
-    }
+  }
 }

@@ -1,53 +1,59 @@
-import { 
-    Controller,
-    Body,
-    Get,
-    Post,
-    Delete,
-    Patch,
-    Param,
-    ParseIntPipe,
- } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Get,
+  Post,
+  Delete,
+  Patch,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { Address as AddressModel } from '@prisma/client';
 import { AddressService } from './address.service';
-import { UpdateAddressDto } from './dto/update-address.dto';
 import { CreateAddressDto } from './dto/create-address.dto';
-import { UseGuards } from '@nestjs/common';
+import { UpdateAddressDto } from './dto/update-address.dto';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 
 @UseGuards(JwtGuard)
-@Controller('vehicle')
-export class VehicleController {
+@Controller('customer/:customerId/addresses')
+export class AddressController {
+  constructor(private readonly addressService: AddressService) {}
 
-    constructor(private readonly addressService: AddressService) {}
+  @Post()
+  async createAddress(
+    @Param('customerId', ParseIntPipe) customerId: number,
+    @Body() createAddressDto: CreateAddressDto,
+  ): Promise<AddressModel> {
+    return this.addressService.createAddress(customerId, createAddressDto);
+  }
 
-    @Post('signup')
-    async signupVehicle (
-        @Body() createAddressDto : CreateAddressDto,
-    ): Promise<AddressModel> {
-           return this.addressService.createAddress(createAddressDto);
-    }
-   
-    @Get(':id')
-    async getAddres(@Param('id', ParseIntPipe) id: number): Promise<AddressModel | null>{
-     return this.addressService.address({id_address: id})
-    }
+  @Get()
+  async getAddresses(
+    @Param('customerId', ParseIntPipe) customerId: number,
+  ): Promise<AddressModel[]> {
+    return this.addressService.addresses(customerId);
+  }
 
-    @Get()
-    async getAddress(): Promise<AddressModel[]> {
-      return this.addressService.address({})
-    }
+  @Get(':addressId')
+  async getAddress(
+    @Param('addressId', ParseIntPipe) addressId: number,
+  ): Promise<AddressModel | null> {
+    return this.addressService.address({ id_address: addressId });
+  }
 
-  @Patch(':id')
-    async updateAddress(
-          @Param('id', ParseIntPipe) id: number,
-          @Body() UpdateAddressDto: UpdateAddressDto,
-        ): Promise <AddressModel>{
-            return this.addressService.updateAddress(id, UpdateAddressDto)
-        }
-    
-  @Delete('id')
-    async deleteAddress(@Param('id', ParseIntPipe) id: number): Promise<AddressModel>{
-        return this.addressService.deleteAddress({id_address: id})
-    }
+  @Patch(':addressId')
+  async updateAddress(
+    @Param('addressId', ParseIntPipe) addressId: number,
+    @Body() updateAddressDto: UpdateAddressDto,
+  ): Promise<AddressModel> {
+    return this.addressService.updateAddress(addressId, updateAddressDto);
+  }
+
+  @Delete(':addressId')
+  async deleteAddress(
+    @Param('addressId', ParseIntPipe) addressId: number,
+  ): Promise<AddressModel> {
+    return this.addressService.deleteAddress({ id_address: addressId });
+  }
 }
