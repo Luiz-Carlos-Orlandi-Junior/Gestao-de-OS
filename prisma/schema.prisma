@@ -47,4 +47,28 @@ model Vehicle {
 
   customer      Customer @relation(fields: [customer_id], references: [id_customer])
   customer_id   Int
+
+  serviceOrders ServiceOrder[]
+}
+
+enum ServiceOrderStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model ServiceOrder {
+  id_service_order Int                @id @default(autoincrement())
+  description      String
+  status           ServiceOrderStatus @default(OPEN)
+  price            Decimal?
+  opened_at        DateTime           @default(now())
+  updated_at       DateTime           @updatedAt
+  completed_at     DateTime?
+
+  vehicle          Vehicle            @relation(fields: [vehicle_id], references: [id_vehicle])
+  vehicle_id       Int
+
+  @@map("service_orders")
 }
