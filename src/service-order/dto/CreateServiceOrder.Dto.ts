@@ -9,6 +9,6 @@ export class CreateServiceOrderDto {
 
   @IsNumber()
   @IsOptional()
-  price!: Number;
+  price!: number;
 
 }

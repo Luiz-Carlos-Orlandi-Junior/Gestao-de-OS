@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { VehicleService } from '../vehicle/vehicle.service';
-import { Address, Prisma } from '@prisma/client';
+import { ServiceOrder, Prisma } from '@prisma/client';
 import { CreateServiceOrderDto } from './dto/CreateServiceOrder.Dto';
 import { UpdateServiceOrderDto } from './dto/UpdateServiceOrder.Dto';
 
@@ -12,65 +12,65 @@ export class ServiceOrderService {
     private vehicleService: VehicleService,
   ) {}
 
-  async createAddress(
-    customerId: number,
+  async createOrder(
+    vehicleId: number,
     data: CreateServiceOrderDto,
-  ): Promise<Address> {
-    const customer = await this.vehicleService.customer({
-      id_customer: customerId,
+  ): Promise<ServiceOrder> {
+    const vehicle = await this.vehicleService.vehicle({
+      id_vehicle: vehicleId,
     });
 
-    if (!customer) {
+    if (!vehicle) {
       throw new NotFoundException(
-        `Cliente com id ${customerId} não encontrado`,
+        `Veiculo com id ${vehicleId} não encontrado`,
       );
     }
 
-    return this.prisma.address.create({
+    return this.prisma.serviceOrder.create({
       data: {
         ...data,
-        customer: {
-          connect: { id_customer: customerId },
+        vehicle: {
+          connect: { id_vehicle: vehicleId },
         },
       },
     });
   }
 
-  async address(
-    addressWhereUniqueInput: Prisma.AddressWhereUniqueInput,
-  ): Promise<Address | null> {
-    return this.prisma.address.findUnique({
-      where: addressWhereUniqueInput,
+  async OrderService(
+    ServiceOrderWhereUniqueInput: Prisma.ServiceOrderWhereUniqueInput,
+  ): Promise<ServiceOrder | null> {
+    return this.prisma.serviceOrder.findUnique({
+      where:ServiceOrderWhereUniqueInput,
     });
   }
 
-  async addresses(customerId: number): Promise<Address[]> {
-    return this.prisma.address.findMany({
-      where: { customer_id: customerId },
+  async OrderServices(vehicleId: number): Promise<ServiceOrder[]> {
+    return this.prisma.serviceOrder.findMany({
+      where: {  vehicle_id : vehicleId },
     });
   }
 
-  async updateAddress(
+  async updateOrderService(
     id: number,
     data: UpdateServiceOrderDto,
-  ): Promise<Address> {
+  ): Promise<ServiceOrder> {
     try {
-      return await this.prisma.address.update({
-        where: { id_address: id },
+      return await this.prisma.serviceOrder.update({
+        where: { id_service_order: id },
         data,
       });
     } catch (error) {
-      throw new NotFoundException('Endereço não encontrado');
+      throw new NotFoundException('Ordem de serviço não encontrada');
     }
   }
 
-  async deleteAddress(
-    where: Prisma.AddressWhereUniqueInput,
-  ): Promise<Address> {
+  async deleteOrderService(
+    where: Prisma.ServiceOrderWhereUniqueInput,
+  ): Promise<ServiceOrder> {
     try {
-      return await this.prisma.address.delete({ where });
+      return await this.prisma.serviceOrder.delete({ where });
     } catch (error) {
-      throw new NotFoundException('Endereço não encontrado');
+      throw new NotFoundException('Ordem de serviço não encontrada');
     }
   }
 }
