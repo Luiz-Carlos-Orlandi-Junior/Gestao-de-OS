@@ -9,51 +9,51 @@ import {
   ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
-import { Address as AddressModel } from '@prisma/client';
+import { ServiceOrder as ServiceOrderModel } from '@prisma/client';
 import { ServiceOrderService } from './service-order.service';
-import { CreateServiceOrderDto } from './dto/CreateServiceOrder.Dto';
-import { UpdateServiceOrderDto } from './dto/UpdateServiceOrder.Dto';
+import {UpdateServiceOrderDto} from './dto/UpdateServiceOrder.Dto';
+import {CreateServiceOrderDto} from './dto/CreateServiceOrder.Dto';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 
 @UseGuards(JwtGuard)
-@Controller('customer/:customerId/addresses')
+@Controller('vehicle/:vehicleId/service-orders')
 export class ServiceOrderController {
   constructor(private readonly serviceOrder: ServiceOrderService) {}
 
   @Post()
   async createOrder(
-    @Param('customerId', ParseIntPipe) customerId: number,
+    @Param('vehicleId', ParseIntPipe) vehicleId: number,
     @Body() createServiceOrderDto: CreateServiceOrderDto,
-  ): Promise<AddressModel> {
-    return this.serviceOrder.createOrder(customerId, createServiceOrderDto);
+  ): Promise<ServiceOrderModel> {
+    return this.serviceOrder.createOrder(vehicleId, createServiceOrderDto);
   }
 
   @Get()
   async getOrder(
-    @Param('customerId', ParseIntPipe) customerId: number,
-  ): Promise<AddressModel[]> {
-    return this.serviceOrder.addresses(customerId);
+    @Param('vehicleId', ParseIntPipe) vehicleId: number,
+  ): Promise<ServiceOrderModel[]> {
+    return this.serviceOrder.findOrdersByVehicle(vehicleId);
   }
 
-  @Get(':addressId')
-  async getAddress(
-    @Param('addressId', ParseIntPipe) addressId: number,
-  ): Promise<AddressModel | null> {
-    return this.serviceOrder.address({ id_address: addressId });
+  @Get(':serviceOrderId')
+  async getOrders(
+    @Param('serviceOrderId', ParseIntPipe) serviceOrderId: number,
+  ): Promise<ServiceOrderModel | null> {
+    return this.serviceOrder.findOrder({ id_service_order: serviceOrderId });
   }
 
-  @Patch(':addressId')
-  async updateAddress(
-    @Param('addressId', ParseIntPipe) addressId: number,
-    @Body() updateAddressDto: UpdateAddressDto,
-  ): Promise<AddressModel> {
-    return this.serviceOrder.updateAddress(addressId, updateAddressDto);
+  @Patch(':serviceOrderId')
+  async updateOrder(
+    @Param('serviceOrderId', ParseIntPipe) serviceOrderId: number,
+    @Body() UpdateServiceOrderDto: UpdateServiceOrderDto,
+  ): Promise<ServiceOrderModel> {
+    return this.serviceOrder.updateOrder(serviceOrderId, UpdateServiceOrderDto);
   }
 
-  @Delete(':addressId')
-  async deleteAddress(
-    @Param('addressId', ParseIntPipe) addressId: number,
-  ): Promise<AddressModel> {
-    return this.serviceOrder.deleteAddress({ id_address: addressId });
+  @Delete(':serviceOrderId')
+  async deleteOrder(
+    @Param('serviceOrderId', ParseIntPipe) serviceOrderId: number,
+  ): Promise<ServiceOrderModel> {
+    return this.serviceOrder.deleteOrder({ id_service_order: serviceOrderId });
   }
 }

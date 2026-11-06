@@ -36,21 +36,21 @@ export class ServiceOrderService {
     });
   }
 
-  async OrderService(
+  async findOrder(
     ServiceOrderWhereUniqueInput: Prisma.ServiceOrderWhereUniqueInput,
   ): Promise<ServiceOrder | null> {
     return this.prisma.serviceOrder.findUnique({
-      where:ServiceOrderWhereUniqueInput,
+      where: ServiceOrderWhereUniqueInput,
     });
   }
 
-  async OrderServices(vehicleId: number): Promise<ServiceOrder[]> {
+  async findOrdersByVehicle(vehicleId: number): Promise<ServiceOrder[]> {
     return this.prisma.serviceOrder.findMany({
       where: {  vehicle_id : vehicleId },
     });
   }
 
-  async updateOrderService(
+  async updateOrder(
     id: number,
     data: UpdateServiceOrderDto,
   ): Promise<ServiceOrder> {
@@ -60,17 +60,17 @@ export class ServiceOrderService {
         data,
       });
     } catch (error) {
-      throw new NotFoundException('Ordem de serviço não encontrada');
+      throw new NotFoundException(`Ordem de serviço com id id ${id} não encontrada`);
     }
   }
 
-  async deleteOrderService(
+  async deleteOrder(
     where: Prisma.ServiceOrderWhereUniqueInput,
   ): Promise<ServiceOrder> {
     try {
       return await this.prisma.serviceOrder.delete({ where });
     } catch (error) {
-      throw new NotFoundException('Ordem de serviço não encontrada');
+      throw new NotFoundException(`Ordem de serviço não encontrada`);
     }
   }
 }

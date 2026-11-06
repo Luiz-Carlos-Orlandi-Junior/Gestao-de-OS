@@ -5,9 +5,11 @@ import { DatabaseModule } from './database/database.module';
 import { CustomerModule } from './customer/customer.module';
 import { FipeModule } from './fipe/fipe.module';
 import { VehicleModule } from './vehicle/vehicle.module';
+import { ServiceOrderModule } from './service-order/service-order.module'
+
 
 
 @Module({
-  imports: [AuthModule, UserModule, DatabaseModule, CustomerModule,FipeModule, VehicleModule],
+  imports: [AuthModule, UserModule, DatabaseModule, CustomerModule,FipeModule, VehicleModule, ServiceOrderModule],
 })
 export class AppModule {}

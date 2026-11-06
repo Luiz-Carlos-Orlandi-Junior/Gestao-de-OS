@@ -7,6 +7,6 @@ import { DatabaseModule } from 'database/database.module';
   imports: [DatabaseModule],
   controllers: [VehicleController],
   providers: [VehicleService],
-  exports: [VehicleModule, VehicleService]
+  exports: [VehicleService],
 })
 export class VehicleModule {}
