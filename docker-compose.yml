@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: gestao
+      POSTGRES_PASSWORD: gestao123
+      POSTGRES_DB: gestao_os
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  api:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://gestao:gestao123@db:5432/gestao_os
+      JWT_SECRET: troque-por-um-valor-de-teste
+      FIPE_API_BASE_URL: https://fipe.parallelum.com.br/api/v2
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:

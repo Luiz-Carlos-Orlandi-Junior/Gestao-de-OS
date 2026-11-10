@@ -46,7 +46,7 @@ export class VehicleController {
             return this.vehicleService.updateVehicle(id, UpdateVehicleDto)
         }
     
-  @Delete('id')
+  @Delete(':id')
     async deleteVehicle(@Param('id', ParseIntPipe) id: number): Promise<VehicleModel>{
         return this.vehicleService.deleteVechicle({id_vehicle: id})
     }
